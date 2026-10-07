@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SoleLedger">
+  <meta name="description" content="Progressive Web App for Footwear Business Owners to track daily sales, past records, monthly turnover, and 20% profit margin.">
+  
+  <title>SoleLedger | Footwear Daily Sales &amp; 20% Profit Tracker</title>
+  
+  <!-- Manifest & Favicons -->
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="./icon.svg">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body class="theme-dark">
+  <div id="app" class="app-container">
+
+    <!-- Top Navigation Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="brand-badge">
+          <img src="./icon.svg" alt="SoleLedger Logo" class="brand-logo" width="38" height="38">
+          <div class="brand-text">
+            <div class="brand-title-row">
+              <span class="brand-name" id="displayShopName">SoleLedger</span>
+              <span class="badge badge-profit">20% Margin</span>
+            </div>
+            <span class="brand-sub">Footwear Sales &amp; Profit Tracker</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Install PWA Button (Hidden if already standalone) -->
+        <button id="installAppBtn" class="btn btn-sm btn-install hidden" title="Install App on Phone/PC">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span>Install App</span>
+        </button>
+
+        <!-- Quick Add Header Button -->
+        <button id="headerAddBtn" class="btn btn-sm btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span>+ Add Sale</span>
+        </button>
+
+        <!-- Dark/Light Theme Toggle -->
+        <button id="themeToggleBtn" class="btn btn-icon" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">
+          <svg id="themeIconDark" class="icon-theme" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          <svg id="themeIconLight" class="icon-theme hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+
+        <!-- Settings Button -->
+        <button id="openSettingsBtn" class="btn btn-icon" title="Settings &amp; Backup" aria-label="Open Settings">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Month & Period Navigation Banner -->
+    <div class="month-selector-bar">
+      <div class="month-nav">
+        <button id="prevMonthBtn" class="btn btn-icon btn-month-nav" title="Previous Month" aria-label="Previous Month">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="month-picker-container">
+          <input type="month" id="monthPickerInput" class="month-picker-input">
+          <div class="month-title-wrap">
+            <span class="calendar-icon">📅</span>
+            <span id="currentMonthLabel" class="current-month-text">October 2026</span>
+            <span class="dropdown-chevron">▼</span>
+          </div>
+        </div>
+        <button id="nextMonthBtn" class="btn btn-icon btn-month-nav" title="Next Month" aria-label="Next Month">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+
+      <div class="month-quick-actions">
+        <button id="todayQuickBtn" class="btn btn-ghost btn-sm" title="Jump to Current Month &amp; Today">Today</button>
+        <button id="printReportBtn" class="btn btn-ghost btn-sm" title="Print Monthly Financial Statement">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          <span>Statement</span>
+        </button>
+        <button id="exportCsvBtn" class="btn btn-ghost btn-sm" title="Export to Excel / CSV">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span>Export CSV</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+
+      <!-- Hero KPI Metrics Grid -->
+      <section class="kpi-grid">
+        <!-- 1. Total Monthly Sales -->
+        <div class="kpi-card kpi-sales">
+          <div class="kpi-header">
+            <span class="kpi-title">TOTAL MONTHLY SALES</span>
+            <div class="kpi-icon-pill icon-sales">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value-row">
+            <span class="kpi-value" id="kpiTotalSales">₹0</span>
+          </div>
+          <div class="kpi-footer">
+            <span class="kpi-meta" id="kpiSalesDays">0 active days</span>
+            <span class="kpi-submeta" id="kpiAvgDailySales">Avg ₹0/day</span>
+          </div>
+        </div>
+
+        <!-- 2. Overall Profit (20%) -->
+        <div class="kpi-card kpi-profit highlight-profit">
+          <div class="kpi-header">
+            <span class="kpi-title">NET PROFIT (20%)</span>
+            <div class="kpi-icon-pill icon-profit">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value-row">
+            <span class="kpi-value text-emerald" id="kpiTotalProfit">₹0</span>
+            <span class="badge badge-emerald" id="profitRateBadge">20.0% Profit</span>
+          </div>
+          <div class="kpi-footer">
+            <span class="kpi-meta text-emerald-light" id="kpiAvgDailyProfit">Avg Profit: ₹0/day</span>
+            <span class="kpi-submeta">Pure earnings</span>
+          </div>
+        </div>
+
+        <!-- 3. Cost of Goods (80%) -->
+        <div class="kpi-card kpi-cost">
+          <div class="kpi-header">
+            <span class="kpi-title">ESTIMATED STOCK COST (80%)</span>
+            <div class="kpi-icon-pill icon-cost">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value-row">
+            <span class="kpi-value" id="kpiTotalCost">₹0</span>
+          </div>
+          <div class="kpi-footer">
+            <span class="kpi-meta">Footwear inventory cost</span>
+            <span class="kpi-submeta">80% cost base</span>
+          </div>
+        </div>
+
+        <!-- 4. Footwear Pairs Sold -->
+        <div class="kpi-card kpi-pairs">
+          <div class="kpi-header">
+            <span class="kpi-title">FOOTWEAR PAIRS SOLD</span>
+            <div class="kpi-icon-pill icon-pairs">👟</div>
+          </div>
+          <div class="kpi-value-row">
+            <span class="kpi-value" id="kpiTotalPairs">0 <small class="unit">pairs</small></span>
+          </div>
+          <div class="kpi-footer">
+            <span class="kpi-meta" id="kpiAvgPairPrice">Avg ₹0/pair</span>
+            <span class="kpi-submeta" id="kpiBestDay">Best: -</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quick Action Callout for Businessman: Add Sales for Present / Past Day -->
+      <section class="quick-entry-banner">
+        <div class="quick-entry-left">
+          <div class="quick-entry-icon">👞</div>
+          <div class="quick-entry-info">
+            <h3>Record Footwear Sales</h3>
+            <p>Add sales for <strong>Today</strong> or backlog <strong>Past Days</strong> with automatic 20% profit calculation.</p>
+          </div>
+        </div>
+        <div class="quick-entry-actions">
+          <button id="quickAddTodayBtn" class="btn btn-secondary">
+            <span>📅 Add for Today</span>
+          </button>
+          <button id="quickAddPastBtn" class="btn btn-primary">
+            <span>⏪ Add for Past Day</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Monthly Sales & Profit Analytics Chart -->
+      <section class="card chart-card">
+        <div class="card-header chart-header">
+          <div>
+            <h2 class="card-title">Daily Sales &amp; 20% Profit Performance</h2>
+            <p class="card-subtitle" id="chartSubtitle">Daily breakdown for October 2026</p>
+          </div>
+          <div class="chart-controls">
+            <div class="chart-legend">
+              <span class="legend-item"><span class="legend-color legend-sales"></span> Total Sales</span>
+              <span class="legend-item"><span class="legend-color legend-profit"></span> 20% Profit</span>
+            </div>
+            <div class="btn-group">
+              <button id="chartViewDaily" class="btn btn-xs btn-tab active">Daily Bars</button>
+              <button id="chartViewCumulative" class="btn btn-xs btn-tab">Growth Curve</button>
+            </div>
+          </div>
+        </div>
+        <div class="chart-body">
+          <div id="chartContainer" class="chart-container">
+            <svg id="salesChartSvg" class="sales-chart" viewBox="0 0 900 300" preserveAspectRatio="none">
+              <!-- Dynamically populated by app.js -->
+            </svg>
+            <div id="chartTooltip" class="chart-tooltip hidden"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Category & Payment Insights Split -->
+      <section class="insights-grid">
+        <!-- Footwear Category Split -->
+        <div class="card insight-card">
+          <div class="card-header">
+            <h2 class="card-title">Sales by Footwear Category</h2>
+            <span class="badge" id="categoryCountBadge">0 Types</span>
+          </div>
+          <div class="card-body">
+            <div id="categoryBreakdownList" class="breakdown-list">
+              <div class="empty-state-sm">No sales data recorded yet for this month.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Mode Split -->
+        <div class="card insight-card">
+          <div class="card-header">
+            <h2 class="card-title">Payment Collections</h2>
+            <span class="badge" id="paymentCountBadge">UPI / Cash / Card</span>
+          </div>
+          <div class="card-body">
+            <div id="paymentBreakdownList" class="breakdown-list">
+              <div class="empty-state-sm">No sales data recorded yet for this month.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Daily Sales Log & Records Section -->
+      <section class="card entries-card">
+        <div class="card-header entries-header">
+          <div>
+            <h2 class="card-title">Monthly Daily Sales Log</h2>
+            <p class="card-subtitle">Every past &amp; present day sales entry with 20% profit computation</p>
+          </div>
+          
+          <div class="entries-filters">
+            <div class="search-input-wrap">
+              <input type="text" id="searchInput" class="input input-sm search-input" placeholder="Search notes, category, bill...">
+            </div>
+            <select id="filterCategory" class="select select-sm">
+              <option value="ALL">All Categories</option>
+              <option value="Sneakers">👟 Sneakers / Sports</option>
+              <option value="Formal">👞 Formal &amp; Office</option>
+              <option value="Sandals">👡 Sandals &amp; Slippers</option>
+              <option value="Casual">👟 Casuals &amp; Loafers</option>
+              <option value="WomenFashion">👠 Women's Fashion / Heels</option>
+              <option value="KidsSchool">🧒 Kids &amp; School</option>
+              <option value="Boots">🥾 Boots &amp; Safety</option>
+              <option value="Accessories">🧦 Socks &amp; Shoe Care</option>
+              <option value="General">📦 General Sales</option>
+            </select>
+            <select id="filterPayment" class="select select-sm">
+              <option value="ALL">All Payments</option>
+              <option value="UPI">📱 UPI / Online</option>
+              <option value="Cash">💵 Cash</option>
+              <option value="Card">💳 Card / POS</option>
+              <option value="Credit">🤝 Credit / Udhaar</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="card-body no-padding">
+          <div id="entriesList" class="entries-list">
+            <!-- Rendered by app.js -->
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Mobile Navigation Bar -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" id="navDashboardBtn">
+        <span class="nav-icon">📊</span>
+        <span class="nav-label">Dashboard</span>
+      </button>
+      <button class="nav-item" id="navAddBtn">
+        <span class="nav-icon-floating">➕</span>
+        <span class="nav-label">Add Sale</span>
+      </button>
+      <button class="nav-item" id="navLogBtn">
+        <span class="nav-icon">📜</span>
+        <span class="nav-label">History</span>
+      </button>
+      <button class="nav-item" id="navSettingsBtn">
+        <span class="nav-icon">⚙️</span>
+        <span class="nav-label">Settings</span>
+      </button>
+    </nav>
+
+    <!-- Floating Action Button for Desktop & Mobile -->
+    <button id="fabAddSale" class="fab" title="Record New Sale" aria-label="Add Sale">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <span class="fab-label">Add Sale</span>
+    </button>
+
+    <!-- ======================================================== -->
+    <!-- MODAL: ADD / EDIT SALES ENTRY (PAST OR PRESENT DAYS)    -->
+    <!-- ======================================================== -->
+    <dialog id="saleModal" class="modal">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <div class="modal-header-title">
+            <span class="modal-icon">🏷️</span>
+            <div>
+              <h2 id="modalTitle" class="modal-title">Record Daily Footwear Sale</h2>
+              <p class="modal-desc">Enter sales amount for today or pick any past date</p>
+            </div>
+          </div>
+          <button id="closeModalBtn" class="btn btn-icon modal-close" aria-label="Close dialog">✕</button>
+        </div>
+
+        <form id="saleForm" class="modal-form">
+          <input type="hidden" id="editEntryId" value="">
+
+          <!-- Date Selector with Past/Today Quick Buttons -->
+          <div class="form-group">
+            <div class="field-header">
+              <label for="saleDate" class="label">Date of Sale <span class="required">*</span></label>
+              <div class="date-quick-chips">
+                <button type="button" class="chip-btn" id="chipToday">Today</button>
+                <button type="button" class="chip-btn" id="chipYesterday">Yesterday</button>
+                <button type="button" class="chip-btn" id="chipDayBefore">2 Days Ago</button>
+              </div>
+            </div>
+            <div class="input-icon-wrap">
+              <span class="input-prefix">📅</span>
+              <input type="date" id="saleDate" class="input input-lg" required>
+            </div>
+            <small class="field-hint">You can choose any past date or today's date to keep records up to date.</small>
+          </div>
+
+          <!-- Sales Amount Input (Huge, Prominent) -->
+          <div class="form-group">
+            <label for="saleAmount" class="label">Daily Sales Amount <span class="required">*</span></label>
+            <div class="input-amount-wrap">
+              <span class="currency-symbol" id="formCurrencyPrefix">₹</span>
+              <input type="number" id="saleAmount" class="input input-amount" placeholder="0" min="0" step="any" required autofocus>
+            </div>
+          </div>
+
+          <!-- Real-time 20% Profit Margin Calculator Box -->
+          <div class="profit-calculator-card">
+            <div class="profit-calc-header">
+              <span class="calc-badge">⚡ Live 20% Profit Calculation</span>
+              <span class="calc-rate-label">Fixed Overall Rate</span>
+            </div>
+            <div class="profit-calc-grid">
+              <div class="calc-item calc-gross">
+                <span class="calc-sub">Gross Sale</span>
+                <span class="calc-val" id="previewGross">₹0</span>
+              </div>
+              <div class="calc-item calc-profit">
+                <span class="calc-sub">Your Profit (20%)</span>
+                <span class="calc-val text-emerald" id="previewProfit">₹0</span>
+              </div>
+              <div class="calc-item calc-cost">
+                <span class="calc-sub">Stock Cost (80%)</span>
+                <span class="calc-val" id="previewCost">₹0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Optional Footwear Specifics Row -->
+          <div class="form-row-2">
+            <!-- Footwear Pairs Sold -->
+            <div class="form-group">
+              <label for="salePairs" class="label">Pairs / Quantity Sold</label>
+              <div class="input-icon-wrap">
+                <span class="input-prefix">👟</span>
+                <input type="number" id="salePairs" class="input" placeholder="e.g. 12" min="1" step="1">
+              </div>
+              <small class="field-hint">Total footwear pairs</small>
+            </div>
+
+            <!-- Footwear Category -->
+            <div class="form-group">
+              <label for="saleCategory" class="label">Category</label>
+              <select id="saleCategory" class="select">
+                <option value="General">📦 General Sales / Multi-Mix</option>
+                <option value="Sneakers">👟 Sneakers &amp; Sports</option>
+                <option value="Formal">👞 Formal &amp; Office Shoes</option>
+                <option value="Sandals">👡 Sandals &amp; Daily Slippers</option>
+                <option value="Casual">👟 Casuals &amp; Loafers</option>
+                <option value="WomenFashion">👠 Women's Fashion &amp; Heels</option>
+                <option value="KidsSchool">🧒 Kids &amp; School Shoes</option>
+                <option value="Boots">🥾 Boots &amp; Work Footwear</option>
+                <option value="Accessories">🧦 Socks, Polish &amp; Insole</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Payment Mode & Bill Note -->
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="salePayment" class="label">Payment Received Via</label>
+              <select id="salePayment" class="select">
+                <option value="UPI">📱 UPI / QR / Online</option>
+                <option value="Cash" selected>💵 Cash</option>
+                <option value="Card">💳 Card / POS Machine</option>
+                <option value="Credit">🤝 Credit / Udhaar Pending</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="saleNote" class="label">Remarks / Customer / Bill #</label>
+              <input type="text" id="saleNote" class="input" placeholder="e.g. Festival rush, bill #402, regular client">
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" id="cancelModalBtn" class="btn btn-ghost">Cancel</button>
+            <button type="submit" id="saveSaleBtn" class="btn btn-primary btn-save">
+              <span id="saveBtnText">💾 Save Sales Record</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </dialog>
+
+    <!-- ======================================================== -->
+    <!-- MODAL: SETTINGS, BACKUP, RESTORE & CUSTOMIZATION        -->
+    <!-- ======================================================== -->
+    <dialog id="settingsModal" class="modal">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <div class="modal-header-title">
+            <span class="modal-icon">⚙️</span>
+            <div>
+              <h2 class="modal-title">Business Settings &amp; Data Backup</h2>
+              <p class="modal-desc">Configure your footwear store, currency, and secure your records</p>
+            </div>
+          </div>
+          <button id="closeSettingsModalBtn" class="btn btn-icon modal-close" aria-label="Close dialog">✕</button>
+        </div>
+
+        <div class="modal-body settings-body">
+          <!-- Shop Name & Currency -->
+          <div class="settings-section">
+            <h3 class="settings-heading">Footwear Business Profile</h3>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="shopNameInput" class="label">Store / Business Name</label>
+                <input type="text" id="shopNameInput" class="input" placeholder="e.g. Royal Footwear Shop">
+              </div>
+              <div class="form-group">
+                <label for="currencySelect" class="label">Currency Symbol</label>
+                <select id="currencySelect" class="select">
+                  <option value="₹">₹ - Indian Rupee (INR)</option>
+                  <option value="$">$ - US Dollar (USD)</option>
+                  <option value="€">€ - Euro (EUR)</option>
+                  <option value="£">£ - British Pound (GBP)</option>
+                  <option value="AED">AED - UAE Dirham</option>
+                  <option value="PKR">Rs - PKR</option>
+                  <option value="৳">৳ - BDT</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Profit Margin Configuration (Default 20%) -->
+            <div class="form-group">
+              <label for="profitMarginInput" class="label">Overall Profit Margin Rate (%)</label>
+              <div class="input-icon-wrap">
+                <input type="number" id="profitMarginInput" class="input" value="20" min="1" max="100" step="0.5">
+                <span class="input-suffix">%</span>
+              </div>
+              <small class="field-hint">Preset to <strong>20% overall profit</strong> as per your business model. You can adjust if needed.</small>
+            </div>
+            
+            <button id="saveStoreSettingsBtn" class="btn btn-secondary btn-sm">Save Business Details</button>
+          </div>
+
+          <!-- PWA Installation Info -->
+          <div class="settings-section">
+            <h3 class="settings-heading">Install as App (PWA)</h3>
+            <div class="pwa-guide-box">
+              <p>📱 <strong>Android / PC:</strong> Click the "Install App" button in the top bar or menu to add SoleLedger to your home screen.</p>
+              <p>🍏 <strong>iPhone / iPad:</strong> Open in Safari, tap the <strong>Share</strong> button (box with up arrow), and select <strong>"Add to Home Screen"</strong>.</p>
+              <p>⚡ <strong>Offline Ready:</strong> Works 100% without internet. All data is securely stored on your device.</p>
+            </div>
+          </div>
+
+          <!-- Data Security & Backup -->
+          <div class="settings-section">
+            <h3 class="settings-heading">Data Security &amp; Backups</h3>
+            <p class="settings-subtext">Download a backup file to keep your business records safe, or transfer data to a new device.</p>
+            
+            <div class="backup-actions-grid">
+              <button id="downloadBackupBtn" class="btn btn-secondary">
+                <span>📥 Download JSON Backup</span>
+              </button>
+
+              <label class="btn btn-secondary file-upload-label">
+                <span>📤 Restore from Backup</span>
+                <input type="file" id="restoreFileInput" accept=".json" class="hidden">
+              </label>
+
+              <button id="loadSampleDataBtn" class="btn btn-ghost">
+                <span>✨ Load Sample Footwear Data</span>
+              </button>
+
+              <button id="clearAllDataBtn" class="btn btn-danger-ghost">
+                <span>🗑️ Reset All Data</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" id="closeSettingsBottomBtn" class="btn btn-primary">Done</button>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- ======================================================== -->
+    <!-- PRINTABLE MONTHLY STATEMENT SHEET (Appears on print)    -->
+    <!-- ======================================================== -->
+    <div id="printSheet" class="print-only">
+      <div class="print-header">
+        <h1 id="printShopTitle">SoleLedger Footwear</h1>
+        <h2>Monthly Sales &amp; 20% Profit Statement</h2>
+        <p id="printMonthPeriod">Period: October 2026</p>
+      </div>
+
+      <div class="print-summary-box">
+        <div class="print-summary-item">
+          <strong>Total Monthly Gross Sales:</strong>
+          <span id="printTotalSales">₹0</span>
+        </div>
+        <div class="print-summary-item">
+          <strong>Net Profit (20% Overall Margin):</strong>
+          <span id="printTotalProfit">₹0</span>
+        </div>
+        <div class="print-summary-item">
+          <strong>Inventory Cost (80%):</strong>
+          <span id="printTotalCost">₹0</span>
+        </div>
+        <div class="print-summary-item">
+          <strong>Total Pairs Sold:</strong>
+          <span id="printTotalPairs">0 pairs</span>
+        </div>
+      </div>
+
+      <table class="print-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Category</th>
+            <th>Payment</th>
+            <th>Pairs</th>
+            <th>Sales Amount</th>
+            <th>20% Profit</th>
+            <th>Remarks</th>
+          </tr>
+        </thead>
+        <tbody id="printTableBody">
+          <!-- Filled dynamically -->
+        </tbody>
+      </table>
+
+      <div class="print-footer">
+        <p>Generated by SoleLedger Footwear Sales &amp; Profit PWA • Certified Business Summary</p>
+      </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden"></div>
+
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
