@@ -1,0 +1,14 @@
+# OS files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# Python temporary files
+__pycache__/
+*.pyc
+
+# Local scratch
+scratch/
+screenshot.png
